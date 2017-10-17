@@ -11,7 +11,7 @@ namespace SocialNetwork.OAuth.Configuration
             return new[] {
                 new Client
                 {
-                    ClientId = "fekberg",
+                    ClientId = "socialnetwork",
                     ClientSecrets = new [] { new Secret("secret".Sha256()) },
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     AllowedScopes = new [] { "socialnetwork" }
