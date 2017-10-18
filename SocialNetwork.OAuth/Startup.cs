@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.OAuth.Configuration;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SocialNetwork.OAuth
 {
@@ -24,7 +25,7 @@ namespace SocialNetwork.OAuth
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServer()
-                .AddTemporarySigningCredential()
+                .AddSigningCredential(new X509Certificate2(@"C:\Codes\SocialNetwork\SocialNetwork.OAuth\Certificates\socialnetwork.pfx", "socialnetwork"))
                 .AddInMemoryClients(Clients.All())
                 .AddInMemoryApiResources(ApiResources.All())
                 .AddTestUsers(Users.All());
