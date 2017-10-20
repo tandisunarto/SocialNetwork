@@ -27,7 +27,7 @@ namespace SocialNetwork.OAuth.Configuration
                 new TestUser
                 {
                     SubjectId = "1",
-                    Username = "mail@filipekberg.se",
+                    Username = "tandi",
                     Password = "password"
                 }
             };

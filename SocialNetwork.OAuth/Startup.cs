@@ -29,14 +29,21 @@ namespace SocialNetwork.OAuth
                 .AddInMemoryClients(Clients.All())
                 .AddInMemoryApiResources(ApiResources.All())
                 .AddTestUsers(Users.All());
+
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(LogLevel.Debug);
+
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
+
+            app.UseStaticFiles();
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
