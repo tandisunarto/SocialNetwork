@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SocialNetwork.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
@@ -13,6 +15,7 @@ namespace SocialNetwork.Api.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            var claims = User.Claims;
             return new string[] { "value1", "value2" };
         }
 

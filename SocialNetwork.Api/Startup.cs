@@ -59,6 +59,13 @@ namespace SocialNetwork.Api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            {
+                RequireHttpsMetadata = false,
+                Authority = "http://localhost:1747",
+                ApiName = "socialnetwork"
+            });
+
             app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
