@@ -25,10 +25,10 @@ namespace SocialNetwork.OAuth.Configuration
                     AllowedScopes = new [] {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "socialnetwork_implicit"
+                        "socialnetwork"
                     },
                     RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
-                    PostLogoutRedirectUris = new [] { "http://localhost:1745/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:1745/signout-callback-oidc" },
                 }
             };
         }
