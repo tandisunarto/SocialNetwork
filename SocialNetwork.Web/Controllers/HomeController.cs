@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Newtonsoft.Json;
 using SocialNetwork.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SocialNetwork.Web.Controllers
 {
@@ -57,6 +58,7 @@ namespace SocialNetwork.Web.Controllers
             return RedirectToAction("Shouts");
         }
 
+        [Authorize]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

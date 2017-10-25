@@ -62,7 +62,7 @@ namespace SocialNetwork.Api
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
                 RequireHttpsMetadata = false,
-                Authority = "http://localhost:1747",
+                Authority = "http://localhost:1749",
                 ApiName = "socialnetwork"
             });
 

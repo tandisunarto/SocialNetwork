@@ -12,8 +12,8 @@ namespace SocialNetwork.OAuth
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseUrls("http://localhost:59418")
+                .UseKestrel()        
+                //.UseUrls("http://localhost:59418")  // comment out this line to open QuickStart UI
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
