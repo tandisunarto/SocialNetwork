@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  socialnetwork.oauth:
+    image: socialnetwork.oauth
+    build:
+      context: ./SocialNetwork.OAuth
+      dockerfile: Dockerfile
