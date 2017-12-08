@@ -58,6 +58,12 @@ namespace SocialNetwork.Web.Controllers
             return RedirectToAction("Shouts");
         }
 
+        public async Task Logout()
+        {
+            await HttpContext.Authentication.SignOutAsync("Cookies");
+            await HttpContext.Authentication.SignOutAsync("oidc");
+        }
+
         [Authorize]
         public IActionResult About()
         {

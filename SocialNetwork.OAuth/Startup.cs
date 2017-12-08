@@ -25,10 +25,10 @@ namespace SocialNetwork.OAuth
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServer()
-                .AddSigningCredential(new X509Certificate2(@"C:\Codes\SocialNetwork\SocialNetwork.OAuth\Certificates\socialnetwork.pfx", "socialnetwork"))
+                .AddSigningCredential(new X509Certificate2("Certificates/socialnetwork.pfx", "socialnetwork"))
                 .AddInMemoryClients(Clients.All())
                 .AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources())
-                .AddInMemoryApiResources(InMemoryConfiguration.All())
+                .AddInMemoryApiResources(InMemoryConfiguration.ApiResources())
                 .AddTestUsers(Users.All());
 
             services.AddMvc();

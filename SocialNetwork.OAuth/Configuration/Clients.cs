@@ -27,6 +27,7 @@ namespace SocialNetwork.OAuth.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         "socialnetwork"
                     },
+                    AllowAccessTokensViaBrowser = true,
                     RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
                     PostLogoutRedirectUris = { "http://localhost:1745/signout-callback-oidc" },
                 }
@@ -50,7 +51,7 @@ namespace SocialNetwork.OAuth.Configuration
 
     public class InMemoryConfiguration
     {
-        public static IEnumerable<ApiResource> All()
+        public static IEnumerable<ApiResource> ApiResources()
         {
             return new[] {
                 new ApiResource("socialnetwork", "Social Network")
