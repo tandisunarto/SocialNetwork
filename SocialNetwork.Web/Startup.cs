@@ -58,11 +58,12 @@ namespace SocialNetwork.Web
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
                 AuthenticationScheme = "oidc",
-                SignInScheme = "Cookies",
-                Authority = "http://localhost:1749",
+                SignInScheme = "Cookies",               // wire up this middleware to the UseCookieAuthentication middleware
+                Authority = "http://localhost:1749",    // base address of the authentication server
                 RequireHttpsMetadata = false,
                 ClientId = "socialnetwork_implicit",
                 ResponseType = "id_token token",
+                Scope = { "openid", "email", "office"},
                 SaveTokens = true
             });
 

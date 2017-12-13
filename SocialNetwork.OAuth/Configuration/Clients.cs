@@ -21,11 +21,14 @@ namespace SocialNetwork.OAuth.Configuration
                 {
                     ClientId = "socialnetwork_implicit",
                     ClientSecrets = new [] { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Implicit,    // flows = decide how ID token and Access token are returned to the client
                     AllowedScopes = new [] {
+                        // identity resources
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "socialnetwork"
+                        "office_number",
+                        // api resources
+                        "socialnetwork",
                     },
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
@@ -58,11 +61,20 @@ namespace SocialNetwork.OAuth.Configuration
             };
         }
 
+        // detail that identity server is protecting
         public static IEnumerable<IdentityResource> IdentityResources()
         {
             return new IdentityResource[] {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResource
+                {
+                    Name = "office",
+                    UserClaims =
+                    {
+                        "office_number"
+                    }
+                }
             };
         }
     }

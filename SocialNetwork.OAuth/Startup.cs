@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using IdentityServer4.Quickstart.UI;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +30,8 @@ namespace SocialNetwork.OAuth
                 .AddInMemoryClients(Clients.All())
                 .AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources())
                 .AddInMemoryApiResources(InMemoryConfiguration.ApiResources())
-                .AddTestUsers(Users.All());
+                //.AddTestUsers(Users.All());
+                .AddTestUsers(TestUsers.Users);
 
             services.AddMvc();
         }
@@ -40,7 +42,7 @@ namespace SocialNetwork.OAuth
 
             app.UseDeveloperExceptionPage();
 
-            app.UseIdentityServer();
+            app.UseIdentityServer(); 
 
             app.UseStaticFiles();
 
