@@ -63,7 +63,7 @@ namespace SocialNetwork.Web
                 RequireHttpsMetadata = false,
                 ClientId = "socialnetwork_implicit",
                 ResponseType = "id_token token",
-                Scope = { "openid", "email", "office"},
+                Scope = { "openid", "profile", "email", "office"},
                 SaveTokens = true
             });
 

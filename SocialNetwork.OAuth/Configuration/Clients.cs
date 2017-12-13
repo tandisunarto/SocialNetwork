@@ -13,6 +13,7 @@ namespace SocialNetwork.OAuth.Configuration
                 new Client
                 {
                     ClientId = "socialnetwork",
+                    ClientName = "SocialNetwork API",
                     ClientSecrets = new [] { new Secret("secret".Sha256()) },
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     AllowedScopes = new [] { "socialnetwork" }
@@ -20,13 +21,15 @@ namespace SocialNetwork.OAuth.Configuration
                 new Client
                 {
                     ClientId = "socialnetwork_implicit",
+                    ClientName = "SocialNetwork Web",
                     ClientSecrets = new [] { new Secret("secret".Sha256()) },
                     AllowedGrantTypes = GrantTypes.Implicit,    // flows = decide how ID token and Access token are returned to the client
                     AllowedScopes = new [] {
                         // identity resources
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "office_number",
+                        IdentityServerConstants.StandardScopes.Email,
+                        "office",
                         // api resources
                         "socialnetwork",
                     },
@@ -67,9 +70,11 @@ namespace SocialNetwork.OAuth.Configuration
             return new IdentityResource[] {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email(),
                 new IdentityResource
                 {
                     Name = "office",
+                    DisplayName = "Your Office Info",
                     UserClaims =
                     {
                         "office_number"
