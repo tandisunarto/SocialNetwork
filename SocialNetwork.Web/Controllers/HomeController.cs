@@ -4,6 +4,9 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using SocialNetwork.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Authentication;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication;
 
 namespace SocialNetwork.Web.Controllers
 {
@@ -36,9 +39,19 @@ namespace SocialNetwork.Web.Controllers
             }
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> TestAPI()
         {
-            return View();
+            var httpClient = new HttpClient();
+
+            var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
+            httpClient.SetBearerToken(accessToken);
+            // or
+            // httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var testTask = await httpClient.GetAsync("http://localhost:1746/test");
+            var testReadStringTask = testTask.Content.ReadAsStringAsync();
+            TestAPI model = JsonConvert.DeserializeObject<TestAPI>(testReadStringTask.Result);
+            return View(model);
         }
 
         [HttpPost]
@@ -58,10 +71,23 @@ namespace SocialNetwork.Web.Controllers
             return RedirectToAction("Shouts");
         }
 
-        public async Task Logout()
+        public IActionResult Login()
         {
-            await HttpContext.Authentication.SignOutAsync("Cookies");
-            await HttpContext.Authentication.SignOutAsync("oidc");
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = "/Home/Index"
+            }, "oidc");
+        }
+
+        public IActionResult Logout()
+        {
+            //await HttpContext.Authentication.SignOutAsync("oidc ");
+            //await HttpContext.Authentication.SignOutAsync("cookies");
+            //return Redirect("~/");
+            return SignOut(new AuthenticationProperties
+            {
+                RedirectUri = "/Home/Index"
+            }, "cookies", "oidc");
         }
 
         [Authorize]

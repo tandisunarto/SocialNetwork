@@ -20,22 +20,27 @@ namespace SocialNetwork.OAuth.Configuration
                 },
                 new Client
                 {
-                    ClientId = "socialnetwork_implicit",
+                    ClientId = "socialnetwork_implicit",                    
                     ClientName = "SocialNetwork Web",
-                    ClientSecrets = new [] { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Implicit,    // flows = decide how ID token and Access token are returned to the client
+                    ClientSecrets = new [] { new Secret("secret.web".Sha256()) },
+                    //AllowedGrantTypes = GrantTypes.Implicit,    // flows = decide how ID token and Access token are returned to the client
+                    AllowedGrantTypes = GrantTypes.Hybrid,
                     AllowedScopes = new [] {
-                        // identity resources
+                        // these are the identity resources
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         "office",
-                        // api resources
+                        // these are the api resources
                         "socialnetwork",
+                        "socialnetwork.api.read",
+                        "socialnetwork.api.write",
                     },
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
-                    PostLogoutRedirectUris = { "http://localhost:1745/signout-callback-oidc" },
+                    PostLogoutRedirectUris = new [] { "http://localhost:1745/signout-callback-oidc" },
+                    // to support logging out all clients when there is a logout request from one of the clients (done using iFrame)
+                    LogoutUri = "http://localhost:1745/signout-oidc"
                 }
             };
         }
@@ -60,7 +65,27 @@ namespace SocialNetwork.OAuth.Configuration
         public static IEnumerable<ApiResource> ApiResources()
         {
             return new[] {
-                new ApiResource("socialnetwork", "Social Network")
+                new ApiResource("socialnetwork", "Social Network"),
+                new ApiResource("socialnetwork.api", "My SocialNetwork API")
+                {
+                    Scopes = new List<Scope>
+                    {
+                        new Scope
+                        {
+                            Name = "socialnetwork.api.read",
+                            DisplayName = "SocialNetwork API to read employee and inventory records",
+                        },
+                        new Scope("socialnetwork.api.write")
+                        {
+                            DisplayName = "SocialNetwork API to update database records",
+                            UserClaims = new List<string> {
+                                "employee_update",
+                                "inventory_update",
+                            }
+                        },
+                        new Scope("socialnetwork.api.delete", "SocialNetwork API to delete database records")
+                    }
+                }
             };
         }
 

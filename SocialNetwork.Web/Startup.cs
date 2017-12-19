@@ -50,7 +50,7 @@ namespace SocialNetwork.Web
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationScheme = "Cookies"
+                AuthenticationScheme = "cookies"
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -58,13 +58,15 @@ namespace SocialNetwork.Web
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
                 AuthenticationScheme = "oidc",
-                SignInScheme = "Cookies",               // wire up this middleware to the UseCookieAuthentication middleware
+                SignInScheme = "cookies",               // wire up this middleware to the UseCookieAuthentication middleware
                 Authority = "http://localhost:1749",    // base address of the authentication server
                 RequireHttpsMetadata = false,
                 ClientId = "socialnetwork_implicit",
-                ResponseType = "id_token token",
-                Scope = { "openid", "profile", "email", "office"},
-                SaveTokens = true
+                ClientSecret = "secret.web",                // use when MVC app exchanges code for access token
+                ResponseType = "id_token token code",        // id_token = id_token, token = access_token
+                Scope = { "openid", "profile", "email", "office", "socialnetwork.api.write" }, 
+                // store the id token in cookie. the id token will get passed to auth server at logout so users won't get prompted to confirm logout request
+                SaveTokens = true                     
             });
 
             app.UseStaticFiles();

@@ -66,6 +66,13 @@ namespace SocialNetwork.Api
                 ApiName = "socialnetwork"
             });
 
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                Authority = "http://localhost:1749",
+                RequireHttpsMetadata = false,
+                Audience = "socialnetwork.api"
+            });
+
             app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
