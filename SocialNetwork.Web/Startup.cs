@@ -61,12 +61,13 @@ namespace SocialNetwork.Web
                 SignInScheme = "cookies",               // wire up this middleware to the UseCookieAuthentication middleware
                 Authority = "http://localhost:1749",    // base address of the authentication server
                 RequireHttpsMetadata = false,
-                ClientId = "socialnetwork_implicit",
-                ClientSecret = "secret.web",                // use when MVC app exchanges code for access token
-                ResponseType = "id_token token code",        // id_token = id_token, token = access_token
-                Scope = { "openid", "profile", "email", "office", "socialnetwork.api.write" }, 
+                ClientId = "socialnetwork_code",
+                ClientSecret = "secret.code",           // use when MVC app exchanges code for access token
+                ResponseType = "id_token code",         // id_token = id_token, token = access_token
+                Scope = { "email", "office", "socialnetwork.api.write", "offline_access" },     // offline_access will give you refresh_token
                 // store the id token in cookie. the id token will get passed to auth server at logout so users won't get prompted to confirm logout request
-                SaveTokens = true                     
+                GetClaimsFromUserInfoEndpoint = true,   // get additional info about user from authotization server
+                SaveTokens = true
             });
 
             app.UseStaticFiles();
@@ -74,8 +75,8 @@ namespace SocialNetwork.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                name: "default",
+                template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

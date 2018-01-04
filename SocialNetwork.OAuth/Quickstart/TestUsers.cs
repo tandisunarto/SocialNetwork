@@ -48,7 +48,8 @@ namespace IdentityServer4.Quickstart.UI
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://tandi-sunarto.com"),
                     new Claim(JwtClaimTypes.Address, @"{ 'street_address': '530 Gaither Road', 'locality': 'Rockville', 'postal_code': 50822, 'country': 'United States' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                    new Claim("office_number", "750C")
+                    new Claim("office_number", "750C"),
+                    new Claim("office_location", "MD18 Rockville")
                 }
             }
         };

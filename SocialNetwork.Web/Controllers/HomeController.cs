@@ -17,21 +17,24 @@ namespace SocialNetwork.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<ActionResult> Shouts()
         {
-            // NEVER DO THIS
-            var username = HttpContext.Request.Cookies["username"]?.ToString();
-            // NEVER DO THIS
-            var password = HttpContext.Request.Cookies["password"]?.ToString();
+            //// NEVER DO THIS
+            //var username = HttpContext.Request.Cookies["username"]?.ToString();
+            //// NEVER DO THIS
+            //var password = HttpContext.Request.Cookies["password"]?.ToString();
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                return RedirectToAction("login");
-            }
-
+            //if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            //{
+            //    return RedirectToAction("login");
+            //}
+            var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
             using (var client = new HttpClient())
             {
-                var shoutsResponse = await (await client.GetAsync($"http://localhost:33917/api/shouts?username={username}&password={password}")).Content.ReadAsStringAsync();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                //var shoutsResponse = await (await client.GetAsync($"http://localhost:33917/api/shouts?username={username}&password={password}")).Content.ReadAsStringAsync();
+                var shoutsResponse = await (await client.GetAsync($"http://localhost:33917/api/shouts")).Content.ReadAsStringAsync();
 
                 var shouts = JsonConvert.DeserializeObject<Shout[]>(shoutsResponse);
                 
@@ -44,9 +47,9 @@ namespace SocialNetwork.Web.Controllers
             var httpClient = new HttpClient();
 
             var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
-            httpClient.SetBearerToken(accessToken);
+            //httpClient.SetBearerToken(accessToken);
             // or
-            // httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var testTask = await httpClient.GetAsync("http://localhost:1746/test");
             var testReadStringTask = testTask.Content.ReadAsStringAsync();
