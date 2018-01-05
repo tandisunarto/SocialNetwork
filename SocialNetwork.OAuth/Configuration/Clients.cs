@@ -2,6 +2,7 @@
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace SocialNetwork.OAuth.Configuration
 {
@@ -58,6 +59,7 @@ namespace SocialNetwork.OAuth.Configuration
                         "socialnetwork.api.read",
                         "socialnetwork.api.write",
                     },
+                    AllowAccessTokensViaBrowser = true,
                     AllowOfflineAccess = true,
                     RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
                     PostLogoutRedirectUris = new [] { "http://localhost:1745/signout-callback-oidc" }
@@ -74,7 +76,11 @@ namespace SocialNetwork.OAuth.Configuration
                 {
                     SubjectId = "1",
                     Username = "tandi",
-                    Password = "password"
+                    Password = "password",
+                    Claims = new List<Claim>
+                    {
+                        new Claim("email", "tandi.sunarto@hotmail.com")
+                    }
                 }
             };
         }
@@ -101,6 +107,7 @@ namespace SocialNetwork.OAuth.Configuration
                             UserClaims = new List<string> {
                                 "employee_update",
                                 "inventory_update",
+                                "email"
                             }
                         },
                         new Scope("socialnetwork.api.delete", "SocialNetwork API to delete database records")
@@ -110,7 +117,7 @@ namespace SocialNetwork.OAuth.Configuration
         }
 
         // detail that identity server is protecting
-        public static IEnumerable<IdentityResource> IdentityResources()
+        public static IEnumerable<IdentityResource> IdentityResources() 
         {
             return new IdentityResource[] {
                 new IdentityResources.OpenId(),

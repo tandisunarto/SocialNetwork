@@ -63,7 +63,7 @@ namespace SocialNetwork.Api
             {
                 RequireHttpsMetadata = false,
                 Authority = "http://localhost:1749",
-                ApiName = "socialnetwork"
+                ApiName = "socialnetwork.api"
             });
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions

@@ -62,8 +62,8 @@ namespace SocialNetwork.Web
                 Authority = "http://localhost:1749",    // base address of the authentication server
                 RequireHttpsMetadata = false,
                 ClientId = "socialnetwork_code",
-                ClientSecret = "secret.code",           // use when MVC app exchanges code for access token
-                ResponseType = "id_token code",         // id_token = id_token, token = access_token
+                ClientSecret = "secret.code",           // MVC app sends client secret to authentication serven when exchanging code for access token
+                ResponseType = "id_token code",         // id_token = id_token, token = access_token, code = code to exchange for access token
                 Scope = { "email", "office", "socialnetwork.api.write", "offline_access" },     // offline_access will give you refresh_token
                 // store the id token in cookie. the id token will get passed to auth server at logout so users won't get prompted to confirm logout request
                 GetClaimsFromUserInfoEndpoint = true,   // get additional info about user from authotization server
