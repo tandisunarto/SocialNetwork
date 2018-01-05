@@ -1,10 +1,12 @@
 ﻿using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.OAuth.Configuration;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
 namespace SocialNetwork.OAuth
@@ -25,13 +27,21 @@ namespace SocialNetwork.OAuth
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var assembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
             services.AddIdentityServer()
                 .AddSigningCredential(new X509Certificate2("Certificates/socialnetwork.pfx", "socialnetwork"))
-                .AddInMemoryClients(Clients.All())
-                .AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources())
-                .AddInMemoryApiResources(InMemoryConfiguration.ApiResources())
+                //.AddInMemoryClients(Clients.All())
+                //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources())
+                //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources())
                 //.AddTestUsers(Users.All());
-                .AddTestUsers(TestUsers.Users);
+                .AddTestUsers(TestUsers.Users)
+                .AddConfigurationStore(
+                    builder => builder.UseSqlServer(Configuration.GetConnectionString("SocialNetwork.OAuth"),
+                    options => options.MigrationsAssembly(assembly)))
+                .AddOperationalStore(
+                    builder => builder.UseSqlServer(Configuration.GetConnectionString("SocialNetwork.OAuth"),
+                    options => options.MigrationsAssembly(assembly)));
 
             services.AddMvc();
         }
