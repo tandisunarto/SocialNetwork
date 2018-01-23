@@ -1,4 +1,6 @@
-﻿using IdentityServer4.Quickstart.UI;
+﻿using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.OAuth.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
@@ -28,19 +31,20 @@ namespace SocialNetwork.OAuth
         public void ConfigureServices(IServiceCollection services)
         {
             var assembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            var connectionString = Configuration.GetConnectionString("SocialNetwork.OAuth");
 
             services.AddIdentityServer()
-                .AddSigningCredential(new X509Certificate2("Certificates/socialnetwork.pfx", "socialnetwork"))
+                //.AddSigningCredential(new X509Certificate2("Certificates/socialnetwork.pfx", "socialnetwork"))
+                .AddTemporarySigningCredential()
+                .AddTestUsers(TestUsers.Users)
                 //.AddInMemoryClients(Clients.All())
                 //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources())
                 //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources())
-                //.AddTestUsers(Users.All());
-                .AddTestUsers(TestUsers.Users)
                 .AddConfigurationStore(
-                    builder => builder.UseSqlServer(Configuration.GetConnectionString("SocialNetwork.OAuth"),
+                    builder => builder.UseSqlServer(connectionString, 
                     options => options.MigrationsAssembly(assembly)))
                 .AddOperationalStore(
-                    builder => builder.UseSqlServer(Configuration.GetConnectionString("SocialNetwork.OAuth"),
+                    builder => builder.UseSqlServer(connectionString, 
                     options => options.MigrationsAssembly(assembly)));
 
             services.AddMvc();
@@ -57,6 +61,51 @@ namespace SocialNetwork.OAuth
             app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
+
+            MigrateInMemoryDataToSqlServer(app);
+
+        }
+
+        public void MigrateInMemoryDataToSqlServer(IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+                var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+
+                context.Database.Migrate();
+
+                if (!context.Clients.Any())
+                {
+                    foreach (var client in InMemoryConfiguration.Clients())
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+
+                    context.SaveChanges();
+                }
+
+                if (!context.IdentityResources.Any())
+                {
+                    foreach (var resource in InMemoryConfiguration.IdentityResources())
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+
+                    context.SaveChanges();
+                }
+
+                if (!context.ApiResources.Any())
+                {
+                    foreach (var resource in InMemoryConfiguration.ApiResources())
+                    {
+                        context.ApiResources.Add(resource.ToEntity());
+                    }
+
+                    context.SaveChanges();
+                }
+            }
         }
     }
 }
