@@ -39,7 +39,7 @@ namespace SocialNetwork.OAuth.Configuration
 
                     RedirectUris = { "http://localhost:1810/signin-oidc" },
                     PostLogoutRedirectUris = { "http://localhost:1810/signout-callback-oidc" },
-                    RequireConsent = false,
+                    //RequireConsent = false,
 
                     AllowedScopes = new List<string>
                     {
