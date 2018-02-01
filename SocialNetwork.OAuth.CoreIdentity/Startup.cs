@@ -47,7 +47,8 @@ namespace SocialNetwork.OAuth.CoreIdentity
                 .AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources())
                 .AddInMemoryApiResources(InMemoryConfiguration.ApiResources())
                 .AddInMemoryClients(InMemoryConfiguration.Clients())
-                .AddAspNetIdentity<ApplicationUser>();
+                //.AddAspNetIdentity<ApplicationUser>();
+                .AddTestUsers(Users.All());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

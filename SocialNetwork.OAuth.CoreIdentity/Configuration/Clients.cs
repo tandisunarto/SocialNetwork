@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace SocialNetwork.OAuth.Configuration
                     Password = "password",
                     Claims = new List<Claim>
                     {
+                        new Claim(JwtClaimTypes.Name, "Tandi Sunarto"),
                         new Claim("email", "tandi.sunarto@hotmail.com")
                     }
                 }
@@ -48,51 +50,45 @@ namespace SocialNetwork.OAuth.Configuration
                     },
                     AllowAccessTokensViaBrowser = true
                 },
-                //new Client
-                //{
-                //    ClientId = "socialnetwork_implicit",
-                //    ClientName = "SocialNetwork Web (Access Token)",
-                //    ClientSecrets = new [] { new Secret("secret.web".Sha256()) },
-                //    AllowedGrantTypes = GrantTypes.Implicit,    // flows = decide how ID token and Access token are returned to the client
-                //    AllowedScopes = new [] {
-                //        // these are the identity resources
-                //        IdentityServerConstants.StandardScopes.OpenId,
-                //        IdentityServerConstants.StandardScopes.Profile,
-                //        IdentityServerConstants.StandardScopes.Email,
-                //        //"office",
-                //        // these are the api resources
-                //        //"socialnetwork",
-                //        //"socialnetwork.api.read",
-                //        //"socialnetwork.api.write",
-                //    },
-                //    //AllowAccessTokensViaBrowser = true,
-                //    RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
-                //    PostLogoutRedirectUris = new [] { "http://localhost:1745/signout-callback-oidc" },
-                //    // to support logging out all clients when there is a logout request from one of the clients (done using iFrame)
-                //    //LogoutUri = "http://localhost:1745/signout-oidc"
-                //},
-                //new Client
-                //{
-                //    ClientId = "socialnetwork_code",
-                //    ClientName = "SocialNetwork Web (Code)",
-                //    ClientSecrets = new [] { new Secret("secret.code".Sha256()) },
-                //    AllowedGrantTypes = GrantTypes.Hybrid,
-                //    AllowedScopes = new [] {
-                //        // these are the identity resources
-                //        IdentityServerConstants.StandardScopes.OpenId,
-                //        IdentityServerConstants.StandardScopes.Profile,
-                //        IdentityServerConstants.StandardScopes.Email,
-                //        "office",
-                //        // these are the api resources
-                //        "socialnetwork",
-                //        "socialnetwork.api.read",
-                //        "socialnetwork.api.write",
-                //    },
-                //    AllowAccessTokensViaBrowser = true,
-                //    AllowOfflineAccess = true,
-                //    RedirectUris = new [] { "http://localhost:1745/signin-oidc" },
-                //    PostLogoutRedirectUris = new [] { "http://localhost:1745/signout-callback-oidc" }
-                //}
+                new Client
+                {
+                    ClientId = "socialnetwork.client_credentials",
+                    ClientName = "Testing with Postman",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "socialnetwork"
+                    },
+                },
+                new Client
+                {
+                    ClientId = "socialnetwork.password",
+                    ClientName = "Testing with Postman",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "socialnetwork"
+                    },
+                },
+                new Client
+                {
+                    ClientId = "socialnetwork.implicit",
+                    ClientName = "Testing with Postman",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "socialnetwork"
+                    },
+                },
             };
         }
 
